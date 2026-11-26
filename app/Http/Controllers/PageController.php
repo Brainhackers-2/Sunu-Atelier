@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\View\View;
+
+/**
+ * PageController – Toutes les pages statiques et en cours de construction.
+ * Chaque méthode retourne la vue correspondante.
+ * Les méthodes seront étoffées phase par phase.
+ */
+class PageController extends Controller
+{
+    // ─── Front-office ────────────────────────────────────────────
+    public function boutique(): View        { return view('boutique'); }
+    public function produit(string $slug): View { return view('produit', compact('slug')); }
+    public function panier(): View          { return view('panier'); }
+    public function commande(): View        { return view('commande'); }
+    public function confirmation(string $token): View { return view('confirmation', compact('token')); }
+    public function suivi(): View           { return view('suivi'); }
+    public function suiviToken(string $token): View   { return view('suivi-token', compact('token')); }
+    public function scan(string $token): View { return view('scan', compact('token')); }
+    public function favoris(): View         { return view('favoris'); }
+    public function notreHistoire(): View   { return view('notre-histoire'); }
+    public function avis(): View            { return view('avis'); }
+    public function contact(): View         { return view('contact'); }
+    public function guideCadeau(): View     { return view('guide-cadeau'); }
+    public function cgv(): View             { return view('cgv'); }
+    public function mentionsLegales(): View { return view('mentions-legales'); }
+
+    // ─── Authentification ────────────────────────────────────────
+    public function inscription(): View     { return view('auth.register'); }
+    public function connexion(): View       { return view('auth.login'); }
+    public function motDePasseOublie(): View{ return view('auth.forgot-password'); }
+    public function monCompte(): View       { return view('mon-compte'); }
+
+    // ─── Espace Pro (V2) ─────────────────────────────────────────
+    public function proIndex(): View        { return view('pro.index'); }
+    public function proConnexion(): View    { return view('pro.connexion'); }
+    public function proInscription(): View  { return view('pro.inscription'); }
+    public function proCommander(): View    { return view('pro.commander'); }
+    public function proCommandes(): View    { return view('pro.commandes'); }
+    public function proFactures(): View     { return view('pro.factures'); }
+    public function proDevis(): View        { return view('pro.devis'); }
+    public function proProfil(): View       { return view('pro.profil'); }
+
+    // ─── Admin (Phase 8) ─────────────────────────────────────────
+    public function adminDashboard(): View  { return view('admin.dashboard'); }
+    public function adminProduits(): View   { return view('admin.produits'); }
+    public function adminCategories(): View { return view('admin.categories'); }
+    public function adminCommandes(): View  { return view('admin.commandes'); }
+    public function adminClients(): View    { return view('admin.clients'); }
+    public function adminStocks(): View     { return view('admin.stocks'); }
+    public function adminCodes(): View      { return view('admin.codes-promo'); }
+    public function adminRapports(): View   { return view('admin.rapports'); }
+    public function adminReglages(): View   { return view('admin.reglages'); }
+    public function adminLogin(): View      { return view('admin.login'); }
+}
