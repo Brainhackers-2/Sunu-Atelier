@@ -13,7 +13,11 @@ class PageController extends Controller
 {
     // ─── Front-office ────────────────────────────────────────────
     public function boutique(): View        { return view('boutique'); }
-    public function produit(string $slug): View { return view('produit', compact('slug')); }
+    public function produit(string $slug): View
+    {
+        $product = \App\Models\Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        return view('produit', compact('product'));
+    }
     public function panier(): View          { return view('panier'); }
     public function commande(): View        { return view('commande'); }
     public function confirmation(string $token): View { return view('confirmation', compact('token')); }

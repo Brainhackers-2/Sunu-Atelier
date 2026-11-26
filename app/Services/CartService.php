@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Favorite;
 use App\Models\ProductVariant;
 use App\Models\User;
@@ -11,6 +12,14 @@ use Illuminate\Support\Facades\Session;
 
 class CartService
 {
+    public function getCart(): ?Cart
+    {
+        $user = Auth::user();
+        return $user
+            ? Cart::where('user_id', $user->id)->with(['items.product.images', 'items.variant', 'promoCode'])->first()
+            : Cart::where('session_id', Session::getId())->with(['items.product.images', 'items.variant', 'promoCode'])->first();
+    }
+
     public function getOrCreateCart(): Cart
     {
         $user = Auth::user();
@@ -18,18 +27,84 @@ class CartService
             return Cart::firstOrCreate(['user_id' => $user->id]);
         }
 
-        $sessionId = Session::getId();
-        return Cart::firstOrCreate(['session_id' => $sessionId]);
+        return Cart::firstOrCreate(['session_id' => Session::getId()]);
     }
 
     public function itemCount(): int
     {
-        $user = Auth::user();
-        $cart = $user
-            ? Cart::where('user_id', $user->id)->first()
-            : Cart::where('session_id', Session::getId())->first();
+        $cart = $this->getCart();
+        return $cart ? (int) $cart->items->sum('quantity') : 0;
+    }
 
-        return $cart ? (int) $cart->items()->sum('quantity') : 0;
+    public function addItem(int $variantId, int $quantity = 1): array
+    {
+        $variant = ProductVariant::with('product')->find($variantId);
+        if (! $variant || ! $variant->is_active || ! $variant->product || ! $variant->product->is_active) {
+            return ['ok' => false, 'message' => 'Cette pièce n’est plus disponible.'];
+        }
+
+        $product = $variant->product;
+        $cart = $this->getOrCreateCart();
+        $existing = $cart->items()->where('product_variant_id', $variant->id)->first();
+        $newQty = ($existing?->quantity ?? 0) + max(1, $quantity);
+
+        if ($product->availability_type !== 'sur_commande') {
+            if ($variant->stock_quantity <= 0) {
+                return ['ok' => false, 'message' => 'Rupture de stock pour cette variante.'];
+            }
+            if ($newQty > $variant->stock_quantity) {
+                $newQty = $variant->stock_quantity;
+            }
+        }
+
+        if ($existing) {
+            $existing->update(['quantity' => $newQty]);
+        } else {
+            $cart->items()->create([
+                'product_id' => $product->id,
+                'product_variant_id' => $variant->id,
+                'quantity' => $newQty,
+            ]);
+        }
+
+        return ['ok' => true, 'message' => "{$product->title} ajouté au panier."];
+    }
+
+    public function updateQuantity(int $cartItemId, int $quantity): void
+    {
+        $cart = $this->getCart();
+        if (! $cart) {
+            return;
+        }
+        $item = $cart->items()->with('variant.product')->find($cartItemId);
+        if (! $item) {
+            return;
+        }
+
+        if ($quantity <= 0) {
+            $item->delete();
+            return;
+        }
+
+        if ($item->variant?->product?->availability_type !== 'sur_commande') {
+            $quantity = min($quantity, max(1, $item->variant->stock_quantity));
+        }
+        $item->update(['quantity' => $quantity]);
+    }
+
+    public function removeItem(int $cartItemId): void
+    {
+        $cart = $this->getCart();
+        $cart?->items()->where('id', $cartItemId)->delete();
+    }
+
+    public function clearCart(): void
+    {
+        $cart = $this->getCart();
+        if ($cart) {
+            $cart->items()->delete();
+            $cart->update(['promo_code_id' => null]);
+        }
     }
 
     public function mergeGuestSessionToUser(string $guestSessionId, User $user): void
@@ -67,7 +142,6 @@ class CartService
             $guestCart->delete();
         }
 
-        // Fusionner également les favoris de la session invité
         $guestFavs = Favorite::where('session_id', $guestSessionId)->get();
         foreach ($guestFavs as $fav) {
             Favorite::firstOrCreate([
