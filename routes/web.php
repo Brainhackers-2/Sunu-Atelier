@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 
@@ -42,10 +43,13 @@ Route::get('/cgv',              [PageController::class, 'cgv'])->name('cgv');
 Route::get('/mentions-legales', [PageController::class, 'mentionsLegales'])->name('mentions-legales');
 
 // ─── Authentification client (Phase 4) ───────────────────────────────────
-Route::get('/inscription',         [PageController::class, 'inscription'])->name('register');
-Route::get('/connexion',           [PageController::class, 'connexion'])->name('login');
-Route::get('/mot-de-passe-oublie', [PageController::class, 'motDePasseOublie'])->name('password.request');
-Route::get('/mon-compte',          [PageController::class, 'monCompte'])->name('mon-compte')->middleware('auth');
+Route::get('/inscription',          [PageController::class, 'inscription'])->name('register')->middleware('guest');
+Route::post('/inscription',         [AuthController::class, 'register'])->name('register.submit')->middleware('guest');
+Route::get('/connexion',            [PageController::class, 'connexion'])->name('login')->middleware('guest');
+Route::post('/connexion',           [AuthController::class, 'login'])->name('login.submit')->middleware('guest');
+Route::post('/deconnexion',         [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::get('/mot-de-passe-oublie',  [PageController::class, 'motDePasseOublie'])->name('password.request');
+Route::get('/mon-compte',           [PageController::class, 'monCompte'])->name('mon-compte')->middleware('auth');
 
 // ─── Espace Pro (Phase V2) ───────────────────────────────────────────────
 Route::prefix('pro')->name('pro.')->group(function () {
@@ -74,4 +78,5 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/rapports',  [PageController::class, 'adminRapports'])->name('rapports');
     Route::get('/reglages',  [PageController::class, 'adminReglages'])->name('reglages');
     Route::get('/login',     [PageController::class, 'adminLogin'])->name('login')->withoutMiddleware(['auth', 'role:admin']);
+    Route::post('/login',    [AuthController::class, 'adminLogin'])->name('login.submit')->withoutMiddleware(['auth', 'role:admin']);
 });

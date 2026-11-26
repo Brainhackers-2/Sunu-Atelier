@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Layout;
 
+use App\Services\CartService;
 use Livewire\Component;
 
 class CartBadge extends Component
@@ -10,15 +11,14 @@ class CartBadge extends Component
 
     protected $listeners = ['cartUpdated' => 'refresh'];
 
-    public function mount(): void
+    public function mount(CartService $cartService): void
     {
-        $this->refresh();
+        $this->count = $cartService->itemCount();
     }
 
-    public function refresh(): void
+    public function refresh(CartService $cartService): void
     {
-        // Sera enrichi Phase 4 avec CartService
-        $this->count = 0;
+        $this->count = $cartService->itemCount();
     }
 
     public function render()

@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Layout;
 
-use Livewire\Component;
+use App\Models\NewsletterSubscriber;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 class NewsletterForm extends Component
 {
@@ -11,13 +12,19 @@ class NewsletterForm extends Component
     public string $email = '';
 
     public bool $submitted = false;
-    public bool $alreadySubscribed = false;
 
     public function subscribe(): void
     {
         $this->validate();
-        // Sera enrichi Phase 4 avec le modèle NewsletterSubscriber
+
+        $cleanEmail = strtolower(trim($this->email));
+        NewsletterSubscriber::firstOrCreate(
+            ['email' => $cleanEmail],
+            ['is_active' => true, 'created_at' => now()]
+        );
+
         $this->submitted = true;
+        $this->reset('email');
     }
 
     public function render()
