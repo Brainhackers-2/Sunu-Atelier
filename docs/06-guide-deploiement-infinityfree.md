@@ -38,12 +38,26 @@ mysqldump -u root sunu_atelier > sunu_atelier_prod.sql
 
 ## 3. Plan B d'hébergement (si InfinityFree bloque la structure Laravel standard)
 
-Si l'hébergeur ne permet pas de pointer le domaine directement sur `/public` :
-1. **Option B1 (adaptation d'arborescence sécurisée)** :
-   - Placer le code applicatif (`app/`, `bootstrap/`, `config/`, `database/`, `resources/`, `routes/`, `storage/`, `vendor/`, `.env`) dans un sous-dossier protégé ou hors de `htdocs/`.
-   - Placer le contenu de `public/` dans `htdocs/` et adapter les chemins `require __DIR__.'/../...'` dans `index.php`.
-   - Ajouter un `.htaccess` bloquant tout accès direct à `.env`, `.git`, `composer.json`.
-2. **Option B2 (hébergement alternatif gratuit / bas coût compatible Laravel)** :
+Deux configurations prêtes à l'emploi sont incluses dans le dépôt :
+
+### Option A — Upload direct dans `htdocs/` avec `.htaccess` racine
+Le fichier `.htaccess` à la racine du projet :
+- bloque tout accès HTTP aux fichiers sensibles (`.env`, `.git`, `composer.*`, `artisan`, `*.sql`, `*.md`) et aux dossiers internes (`app/`, `bootstrap/`, `config/`, `database/`, `resources/`, `routes/`, `storage/`, `vendor/`) ;
+- redirige toutes les autres requêtes vers `public/$1`.
+
+### Option B1 (recommandée sur InfinityFree) — Package autonome `deploy/infinityfree/`
+Sur InfinityFree, `htdocs/` est imposé comme racine web et les liens symboliques FTP (`public/storage`) ne sont pas supportés. Exécutez le script PowerShell fourni :
+```powershell
+.\scripts\prepare-infinityfree.ps1
+```
+Ce script génère un dossier prêt pour FileZilla dans `deploy/infinityfree/` :
+- `deploy/infinityfree/htdocs/` contient les assets publics (`build/`, `storage/` copié en vrai dossier, `index.php` adapté avec `$app->usePublicPath(__DIR__)`, `.htaccess` de routage).
+- `deploy/infinityfree/htdocs/core/` contient le code Laravel (`app/`, `bootstrap/`, `config/`, `database/`, `resources/`, `routes/`, `storage/`, `vendor/`) protégé par `core/.htaccess` (`Require all denied`).
+- `deploy/infinityfree/htdocs/core/.env` est pré-généré depuis `.env.production.example` avec une `APP_KEY` fraîche : il ne reste qu'à y saisir `APP_URL` et vos identifiants MySQL InfinityFree (`DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
+- `deploy/infinityfree/sunu_atelier_demo.sql` est prêt à être importé dans phpMyAdmin.
+
+### Option B2 & B3 (alternatives)
+1. **Option B2 (hébergement alternatif gratuit / bas coût compatible Laravel)** :
    - Comparer une alternative compatible PHP/MySQL/SSH si les limites de fichiers/inodes d'InfinityFree bloquent `vendor/`.
-3. **Option B3 (dernier recours pour soutenance/démo)** :
+2. **Option B3 (dernier recours pour soutenance/démo)** :
    - Présenter l'application en local (`php artisan serve`) avec la base `sunu_atelier` peuplée et documenter le blocage constaté.

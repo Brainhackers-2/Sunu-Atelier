@@ -1,0 +1,20 @@
+<IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquer l'accès aux fichiers cachés (.env, .git, .htaccess, etc.)
+    RewriteRule ^\. - [F,L]
+
+    # Bloquer l'accès direct aux fichiers sensibles à la racine
+    RewriteRule ^(composer\.(json|lock)|package(-lock)?\.json|artisan|phpunit\.xml|vite\.config\.js|.*\.(md|sql|ps1|sh))$ - [F,L]
+
+    # Bloquer l'accès direct aux dossiers internes de Laravel
+    RewriteRule ^(app|bootstrap|config|database|docs|node_modules|resources|routes|scripts|storage|tests|vendor)(/|$) - [F,L]
+
+    # Rediriger toutes les autres requêtes vers public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
