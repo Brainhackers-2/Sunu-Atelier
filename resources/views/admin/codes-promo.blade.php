@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Codes promo</x-slot:title><livewire:admin.promo-codes-manager /></x-admin-layout>

@@ -34,7 +34,12 @@ class PageController extends Controller
     public function suiviToken(string $token): View   { return view('suivi-token', compact('token')); }
     public function scan(string $token): View { return view('scan', compact('token')); }
     public function favoris(): View         { return view('favoris'); }
-    public function notreHistoire(): View   { return view('notre-histoire'); }
+    public function notreHistoire(): View
+    {
+        $content = \App\Models\SiteContent::where('section_key', 'notre_histoire')->first();
+        $artisans = \App\Models\Artisan::where('is_active', true)->get();
+        return view('notre-histoire', compact('content', 'artisans'));
+    }
     public function avis(): View            { return view('avis'); }
     public function contact(): View         { return view('contact'); }
     public function guideCadeau(): View     { return view('guide-cadeau'); }
@@ -63,6 +68,18 @@ class PageController extends Controller
     public function adminCategories(): View { return view('admin.categories'); }
     public function adminCommandes(): View  { return view('admin.commandes'); }
     public function adminClients(): View    { return view('admin.clients'); }
+    public function adminClientsCsv(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $clients = \App\Models\User::where('role', 'client')->withCount('orders')->withSum('orders', 'total_amount')->get();
+        return response()->streamDownload(function () use ($clients) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['Nom', 'Email', 'Telephone', 'Commandes', 'Total FCFA']);
+            foreach ($clients as $c) {
+                fputcsv($out, [$c->name, $c->email, $c->phone, $c->orders_count, (int) $c->orders_sum_total_amount]);
+            }
+            fclose($out);
+        }, 'clients-sunu-atelier.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
     public function adminStocks(): View     { return view('admin.stocks'); }
     public function adminCodes(): View      { return view('admin.codes-promo'); }
     public function adminRapports(): View   { return view('admin.rapports'); }

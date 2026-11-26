@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Réglages &amp; Contenus</x-slot:title><livewire:admin.settings-manager /></x-admin-layout>

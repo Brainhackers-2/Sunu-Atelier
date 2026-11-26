@@ -74,6 +74,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/categories',[PageController::class, 'adminCategories'])->name('categories');
     Route::get('/commandes', [PageController::class, 'adminCommandes'])->name('commandes');
     Route::get('/clients',   [PageController::class, 'adminClients'])->name('clients');
+    Route::get('/clients/export.csv', [PageController::class, 'adminClientsCsv'])->name('clients.csv');
     Route::get('/stocks',    [PageController::class, 'adminStocks'])->name('stocks');
     Route::get('/codes-promo',[PageController::class, 'adminCodes'])->name('codes-promo');
     Route::get('/rapports',  [PageController::class, 'adminRapports'])->name('rapports');

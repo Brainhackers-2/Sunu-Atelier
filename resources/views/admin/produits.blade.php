@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Produits</x-slot:title><livewire:admin.products-manager /></x-admin-layout>

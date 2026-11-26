@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Catégories</x-slot:title><livewire:admin.categories-manager /></x-admin-layout>

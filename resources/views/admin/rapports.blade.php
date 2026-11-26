@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Rapports</x-slot:title><livewire:admin.reports-manager /></x-admin-layout>

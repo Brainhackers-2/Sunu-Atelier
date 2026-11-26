@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Clients &amp; CRM</x-slot:title><livewire:admin.clients-manager /></x-admin-layout>

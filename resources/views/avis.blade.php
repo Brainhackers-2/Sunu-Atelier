@@ -1,0 +1,1 @@
+<x-app-layout><x-slot:title>Avis clients</x-slot:title><livewire:community.reviews-section /></x-app-layout>

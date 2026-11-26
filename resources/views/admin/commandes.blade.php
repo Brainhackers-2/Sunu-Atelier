@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Commandes</x-slot:title><livewire:admin.orders-manager /></x-admin-layout>

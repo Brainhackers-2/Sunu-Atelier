@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Stocks</x-slot:title><livewire:admin.stocks-manager /></x-admin-layout>

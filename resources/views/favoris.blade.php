@@ -1,0 +1,1 @@
+<x-app-layout><x-slot:title>Mes favoris</x-slot:title><livewire:shop.favorites-list /></x-app-layout>
