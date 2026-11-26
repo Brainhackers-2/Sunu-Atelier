@@ -16,19 +16,6 @@
             </form>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-2xl border border-ebene/10 p-6">
-                <h2 class="font-bold text-ebene mb-2">Mes commandes</h2>
-                <p class="text-sm text-ebene/60">Consultez l'historique et téléchargez vos reçus PDF dès la Phase 6.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-ebene/10 p-6">
-                <h2 class="font-bold text-ebene mb-2">Mes adresses</h2>
-                <p class="text-sm text-ebene/60">Carnet d'adresses de livraison Sénégal & International.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-ebene/10 p-6">
-                <h2 class="font-bold text-ebene mb-2">Mes favoris</h2>
-                <a href="{{ route('favoris') }}" class="text-sm text-terre font-medium hover:underline">Voir mes pièces favorites</a>
-            </div>
-        </div>
+        <livewire:account.account-dashboard />
     </section>
 </x-app-layout>
