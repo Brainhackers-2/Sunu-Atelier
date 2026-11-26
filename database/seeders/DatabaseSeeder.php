@@ -19,6 +19,7 @@ use App\Models\Setting;
 use App\Models\ShippingRate;
 use App\Models\SiteContent;
 use App\Models\Technique;
+use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -94,12 +95,20 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // ─── 2. Catégories (4 univers du cahier 2.1) ────────────────────────
+        $categoryImages = [
+            'maroquinerie' => 'images/categories/maroquinerie.jpg',
+            'textiles'     => 'images/categories/textiles.jpg',
+            'bijoux'       => 'images/categories/bijoux.jpg',
+            'decoration'   => 'images/categories/decoration.jpg',
+        ];
         $categories = collect([
             ['name' => 'Maroquinerie & accessoires', 'slug' => 'maroquinerie', 'sort_order' => 1, 'description' => 'Sacs, pochettes et sandales en cuir tanné artisanalement.'],
             ['name' => 'Textiles & tissages', 'slug' => 'textiles', 'sort_order' => 2, 'description' => 'Pagnes tissés, coussins et chemins de table en coton bio local.'],
             ['name' => 'Bijoux & parures', 'slug' => 'bijoux', 'sort_order' => 3, 'description' => 'Colliers, bracelets et boucles en laiton martelé et perles de verre.'],
             ['name' => 'Décoration & poterie', 'slug' => 'decoration', 'sort_order' => 4, 'description' => 'Vases en terre cuite, paniers en raphia et sculptures sur bois.'],
-        ])->mapWithKeys(fn ($c) => [$c['slug'] => Category::create($c)]);
+        ])->mapWithKeys(fn ($c) => [$c['slug'] => Category::create(array_merge($c, [
+            'header_image' => $categoryImages[$c['slug']],
+        ]))]);
 
         // ─── 3. Matières & Techniques ────────────────────────────────────────
         $materials = collect(['Cuir', 'Coton', 'Bois', 'Argile', 'Laiton', 'Perles', 'Raphia'])
@@ -118,6 +127,23 @@ class DatabaseSeeder extends Seeder
         ])->map(fn ($a) => Artisan::create(array_merge($a, ['slug' => Str::slug($a['name']), 'is_active' => true])));
 
         // ─── 5. 14 Produits artisanaux ───────────────────────────────────────
+        // Map SKU → image path
+        $productImages = [
+            'SA-MAR-001' => 'images/products/sa-mar-001.jpg',
+            'SA-MAR-002' => 'images/products/sa-mar-002.jpg',
+            'SA-MAR-003' => 'images/products/sa-mar-003.jpg',
+            'SA-TEX-001' => 'images/products/sa-tex-001.jpg',
+            'SA-TEX-002' => 'images/products/sa-tex-002.jpg',
+            'SA-TEX-003' => 'images/products/sa-tex-003.jpg',
+            'SA-TEX-004' => 'images/products/sa-tex-004.jpg',
+            'SA-BIJ-001' => 'images/products/sa-bij-001.jpg',
+            'SA-BIJ-002' => 'images/products/sa-bij-002.jpg',
+            'SA-BIJ-003' => 'images/products/sa-bij-003.jpg',
+            'SA-DEC-001' => 'images/products/sa-dec-001.jpg',
+            'SA-DEC-002' => 'images/products/sa-dec-002.jpg',
+            'SA-DEC-003' => 'images/products/sa-dec-003.jpg',
+            'SA-DEC-004' => 'images/products/sa-dec-004.jpg',
+        ];
         $catalog = [
             ['cat' => 'maroquinerie', 'art' => 0, 'tech' => 'maroquinerie', 'mats' => ['cuir'], 'title' => 'Sac Cabas Ndar en Cuir Camel', 'sku' => 'SA-MAR-001', 'type' => 'en_stock', 'price' => 45000, 'compare' => 52000, 'pro' => 29000, 'best' => true, 'new' => false, 'stock' => 8, 'variants' => [['size' => 'Grand', 'color' => 'Camel', 'stock' => 5], ['size' => 'Moyen', 'color' => 'Ebène', 'stock' => 3]]],
             ['cat' => 'maroquinerie', 'art' => 0, 'tech' => 'maroquinerie', 'mats' => ['cuir'], 'title' => 'Pochette Gorée Cousue Main', 'sku' => 'SA-MAR-002', 'type' => 'en_stock', 'price' => 18500, 'compare' => null, 'pro' => 12000, 'best' => true, 'new' => true, 'stock' => 12, 'variants' => [['size' => 'Unique', 'color' => 'Terre cuite', 'stock' => 7], ['size' => 'Unique', 'color' => 'Noir', 'stock' => 5]]],
@@ -174,6 +200,17 @@ class DatabaseSeeder extends Seeder
             }
 
             $createdProducts[] = $product;
+
+            // ─── Ajouter l'image principale du produit ──────────────────────
+            if (isset($productImages[$item['sku']])) {
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'path'       => $productImages[$item['sku']],
+                    'alt_text'   => $item['title'],
+                    'sort_order' => 1,
+                    'is_primary' => true,
+                ]);
+            }
         }
 
         // ─── 6. Zones de livraison & tarifs fixes ───────────────────────────

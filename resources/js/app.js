@@ -1,14 +1,7 @@
 import './bootstrap';
 
-// ─── Alpine.js ───────────────────────────────────────────────────
-import Alpine from 'alpinejs';
-import focus   from '@alpinejs/focus';
-import collapse from '@alpinejs/collapse';
-
-Alpine.plugin(focus);
-Alpine.plugin(collapse);
-window.Alpine = Alpine;
-Alpine.start();
+// Note : Livewire 4 embarque et démarre Alpine.js automatiquement (@livewireScripts).
+// Ne pas rappeler Alpine.start() ici pour éviter les conflits d'entangle.
 
 // ─── GSAP + ScrollTrigger ─────────────────────────────────────────
 import { gsap }         from 'gsap';

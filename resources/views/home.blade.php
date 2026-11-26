@@ -43,12 +43,16 @@
 
             {{-- Visuel vitrine + mini-carte produit superposée (structure BéaLux) --}}
             <div class="lg:col-span-6 relative gs-reveal">
-                <div class="aspect-[4/3] rounded-3xl bg-gradient-to-br from-foret to-ebene p-8 flex flex-col justify-between text-ivoire shadow-xl overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-14 w-14 rounded-2xl object-cover bg-ivoire p-1">
+                <div class="relative aspect-[4/3] rounded-3xl bg-gradient-to-br from-foret to-ebene p-8 flex flex-col justify-between text-ivoire shadow-xl overflow-hidden">
+                    <img src="{{ asset('images/categories/maroquinerie.jpg') }}"
+                         alt="Artisanat sénégalais Sunu Atelier"
+                         class="absolute inset-0 w-full h-full object-cover opacity-55">
+                    <div class="absolute inset-0 bg-gradient-to-t from-ebene/85 via-ebene/30 to-ebene/40"></div>
+                    <div class="relative z-10 flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-ivoire/15 backdrop-blur-sm text-ivoire text-xs font-semibold">Fait main au Sénégal</span>
                         <span class="px-3 py-1 rounded-full bg-or text-ebene text-xs font-bold">Collection Sénégal</span>
                     </div>
-                    <div>
+                    <div class="relative z-10">
                         <p class="text-xs uppercase tracking-widest text-or mb-1">Savoir-faire local</p>
                         <p class="text-2xl font-bold leading-snug">Dakar · Thiès · Saint-Louis · Casamance</p>
                     </div>
@@ -57,10 +61,14 @@
                 @if ($bestsellers->first())
                     @php $featured = $bestsellers->first(); @endphp
                     <a href="{{ route('produit', $featured->slug) }}"
-                       class="mt-4 sm:mt-0 sm:absolute sm:-bottom-5 sm:left-6 bg-white rounded-2xl p-4 shadow-lg border border-ebene/10 flex items-center gap-4 max-w-xs hover:border-terre transition-colors">
-                        <div class="w-12 h-12 rounded-xl bg-foret/10 text-foret font-bold flex items-center justify-center shrink-0">
-                            {{ strtoupper(substr($featured->category?->name ?? 'SA', 0, 2)) }}
-                        </div>
+                       class="mt-4 sm:mt-0 sm:absolute sm:-bottom-5 sm:left-6 z-20 bg-white rounded-2xl p-4 shadow-lg border border-ebene/10 flex items-center gap-4 max-w-xs hover:border-terre transition-colors">
+                        @if ($featured->images->first())
+                            <img src="{{ asset($featured->images->first()->path) }}" alt="{{ $featured->title }}" class="w-12 h-12 rounded-xl object-cover shrink-0">
+                        @else
+                            <div class="w-12 h-12 rounded-xl bg-foret/10 text-foret font-bold flex items-center justify-center shrink-0">
+                                {{ strtoupper(substr($featured->category?->name ?? 'SA', 0, 2)) }}
+                            </div>
+                        @endif
                         <div class="min-w-0">
                             <p class="text-xs text-terre font-semibold">Coup de cœur</p>
                             <p class="text-sm font-bold text-ebene truncate">{{ $featured->title }}</p>
@@ -107,10 +115,16 @@
             @foreach ($categories as $cat)
                 <a href="{{ route('boutique', ['cat' => $cat->slug]) }}"
                    class="group relative rounded-2xl overflow-hidden bg-foret text-ivoire p-6 min-h-[180px] flex flex-col justify-between shadow-sm hover:shadow-lg transition-all gs-reveal">
-                    <span class="w-10 h-10 rounded-xl bg-ivoire/15 flex items-center justify-center text-or group-hover:scale-110 transition-transform">
+                    @if ($cat->header_image)
+                        <img src="{{ asset($cat->header_image) }}"
+                             alt="{{ $cat->name }}"
+                             class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 group-hover:scale-105 transition-all duration-500"
+                             loading="lazy">
+                    @endif
+                    <span class="relative z-10 w-10 h-10 rounded-xl bg-ivoire/15 flex items-center justify-center text-or group-hover:scale-110 transition-transform">
                         <i data-lucide="compass" class="size-5" aria-hidden="true"></i>
                     </span>
-                    <div>
+                    <div class="relative z-10">
                         <h3 class="font-bold text-base sm:text-lg leading-snug group-hover:text-or transition-colors">{{ $cat->name }}</h3>
                         <p class="text-xs text-ivoire/75 mt-1 line-clamp-2">{{ $cat->description }}</p>
                     </div>

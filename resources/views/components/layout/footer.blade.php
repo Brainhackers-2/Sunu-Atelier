@@ -17,9 +17,12 @@
 
         {{-- Colonne 1 : Identité de marque --}}
         <div class="flex flex-col gap-4">
-            <a href="{{ route('home') }}" class="inline-block" aria-label="Sunu Atelier – Accueil">
-                <span class="text-2xl font-bold text-ivoire">Sunu Atelier</span>
-                <span class="block text-[10px] tracking-widest text-ivoire/50 uppercase mt-0.5">Artisanat d'exception</span>
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-3 group" aria-label="Sunu Atelier – Accueil">
+                <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-12 w-12 rounded-xl object-contain bg-ivoire p-1 shrink-0">
+                <div>
+                    <span class="text-2xl font-bold text-ivoire group-hover:text-or transition-colors">Sunu Atelier</span>
+                    <span class="block text-[10px] tracking-widest text-ivoire/50 uppercase mt-0.5">Artisanat d'exception</span>
+                </div>
             </a>
             <p class="text-sm text-ivoire/70 leading-relaxed">
                 Pièces artisanales authentiques du Sénégal – maroquinerie, textiles, bijoux et décoration.

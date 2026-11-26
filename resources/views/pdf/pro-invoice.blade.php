@@ -18,8 +18,19 @@
 </head>
 <body>
     <div class="top">
-        <div class="brand">{{ $brandName }} – FACTURE COMMERCIALE PRO</div>
-        <div>Normes OHADA / Sénégal · Dakar, Sénégal</div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 0;">
+            <tr>
+                @if (file_exists(public_path('images/logo-sunu-atelier.png')))
+                    <td style="width: 58px; padding: 0 12px 0 0; vertical-align: middle;">
+                        <img src="{{ public_path('images/logo-sunu-atelier.png') }}" alt="Logo {{ $brandName }}" style="width: 50px; height: 50px;">
+                    </td>
+                @endif
+                <td style="padding: 0; vertical-align: middle;">
+                    <div class="brand">{{ $brandName }} – FACTURE COMMERCIALE PRO</div>
+                    <div>Normes OHADA / Sénégal · Dakar, Sénégal</div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <table class="grid">

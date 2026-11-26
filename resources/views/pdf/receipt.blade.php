@@ -19,8 +19,19 @@
 </head>
 <body>
     <div class="header">
-        <div class="brand">{{ $brandName }}</div>
-        <div class="meta">Artisanat d'exception · {{ $address }} · {{ $phone }}</div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 0;">
+            <tr>
+                @if (file_exists(public_path('images/logo-sunu-atelier.png')))
+                    <td style="width: 58px; border: none; padding: 0 12px 0 0; vertical-align: middle;">
+                        <img src="{{ public_path('images/logo-sunu-atelier.png') }}" alt="Logo {{ $brandName }}" style="width: 50px; height: 50px;">
+                    </td>
+                @endif
+                <td style="border: none; padding: 0; vertical-align: middle;">
+                    <div class="brand">{{ $brandName }}</div>
+                    <div class="meta">Artisanat d'exception · {{ $address }} · {{ $phone }}</div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div class="box">

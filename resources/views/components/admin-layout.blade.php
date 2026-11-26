@@ -13,9 +13,12 @@
         {{-- Sidebar Desktop --}}
         <aside class="hidden lg:flex w-64 bg-ebene text-ivoire flex-col shrink-0">
             <div class="p-5 border-b border-ivoire/10">
-                <a href="{{ route('admin.dashboard') }}" class="block">
-                    <span class="text-xl font-bold text-or">Sunu Atelier</span>
-                    <span class="block text-[11px] text-ivoire/60 uppercase tracking-wider">Back-Office Admin</span>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-10 w-10 rounded-xl object-contain bg-ivoire p-1 shrink-0">
+                    <div>
+                        <span class="text-xl font-bold text-or">Sunu Atelier</span>
+                        <span class="block text-[11px] text-ivoire/60 uppercase tracking-wider">Back-Office Admin</span>
+                    </div>
                 </a>
             </div>
             <nav class="flex-1 p-3 space-y-1 text-sm overflow-y-auto">

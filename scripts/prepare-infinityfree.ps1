@@ -53,6 +53,7 @@ foreach ($Dir in $CoreDirs) {
     Copy-Item -Path (Join-Path $Root $Dir) -Destination $Core -Recurse -Force
 }
 Copy-Item -Path (Join-Path $Root "artisan") -Destination $Core -Force
+Copy-Item -Path (Join-Path $Root "composer.json") -Destination $Core -Force
 
 # Nettoyer les caches locaux dans core/bootstrap/cache et logs
 Get-ChildItem -Path (Join-Path $Core "bootstrap\cache") -Filter "*.php" -ErrorAction SilentlyContinue | Remove-Item -Force

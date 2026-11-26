@@ -30,11 +30,14 @@
     <div class="max-w-screen-xl mx-auto px-4 h-[72px] flex items-center justify-between gap-4">
 
         {{-- ── Logo ───────────────────────────────── --}}
-        <a href="{{ route('home') }}" class="flex flex-col leading-tight shrink-0 group" aria-label="Sunu Atelier – Accueil">
-            <span class="text-xl font-bold text-foret tracking-tight group-hover:text-terre transition-colors">
-                Sunu Atelier
-            </span>
-            <span class="text-[10px] text-ebene/60 tracking-widest uppercase">Artisanat d'exception</span>
+        <a href="{{ route('home') }}" class="flex items-center gap-2.5 shrink-0 group" aria-label="Sunu Atelier – Accueil">
+            <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-11 w-11 rounded-xl object-contain shrink-0">
+            <div class="flex flex-col leading-tight">
+                <span class="text-xl font-bold text-foret tracking-tight group-hover:text-terre transition-colors">
+                    Sunu Atelier
+                </span>
+                <span class="text-[10px] text-ebene/60 tracking-widest uppercase">Artisanat d'exception</span>
+            </div>
         </a>
 
         {{-- ── Liens desktop ─────────────────────── --}}
@@ -156,7 +159,10 @@
         <nav class="relative w-72 max-w-[85vw] bg-ivoire h-full flex flex-col shadow-2xl">
             {{-- En-tête tiroir --}}
             <div class="flex items-center justify-between p-4 border-b border-ebene/10">
-                <span class="font-bold text-foret text-lg">Menu</span>
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-8 w-8 rounded-lg object-contain">
+                    <span class="font-bold text-foret text-lg">Sunu Atelier</span>
+                </div>
                 <button
                     type="button"
                     x-on:click="mobileMenuOpen = false"

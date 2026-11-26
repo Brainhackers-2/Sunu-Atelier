@@ -13,7 +13,18 @@
     </style>
 </head>
 <body>
-    <h1>Feuille de route livreur – {{ now()->format('d/m/Y') }}</h1>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; border-bottom: 2px solid #125B3E;">
+        <tr>
+            @if (file_exists(public_path('images/logo-sunu-atelier.png')))
+                <td style="width: 52px; border: none; padding: 0 10px 8px 0; vertical-align: middle;">
+                    <img src="{{ public_path('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" style="width: 44px; height: 44px;">
+                </td>
+            @endif
+            <td style="border: none; padding: 0 0 8px 0; vertical-align: middle;">
+                <h1 style="margin: 0;">Sunu Atelier – Feuille de route livreur – {{ now()->format('d/m/Y') }}</h1>
+            </td>
+        </tr>
+    </table>
     <table>
         <thead>
             <tr>
