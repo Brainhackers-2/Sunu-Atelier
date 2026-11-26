@@ -60,6 +60,7 @@ Route::prefix('pro')->name('pro.')->group(function () {
     Route::get('/commander',  [PageController::class, 'proCommander'])->name('commander');
     Route::get('/commandes',  [PageController::class, 'proCommandes'])->name('commandes');
     Route::get('/factures',   [PageController::class, 'proFactures'])->name('factures');
+    Route::get('/factures/{token}.pdf', [PageController::class, 'proFacturePdf'])->name('facture.pdf')->middleware('auth');
     Route::get('/devis',      [PageController::class, 'proDevis'])->name('devis');
     Route::get('/profil',     [PageController::class, 'proProfil'])->name('profil');
 });

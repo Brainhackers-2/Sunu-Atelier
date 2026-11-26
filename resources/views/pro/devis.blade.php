@@ -1,9 +1,12 @@
 <x-app-layout>
-    <x-slot:title>Bientôt disponible (V2)</x-slot:title>
-    <section class="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
-        <span class="px-3 py-1 rounded-full bg-or text-ebene text-xs font-bold">Fonctionnalité V2</span>
-        <h1 class="text-2xl sm:text-3xl font-bold text-ebene">Cette section arrive en V2</h1>
-        <p class="text-sm text-ebene/70">L'Espace Professionnels complet et le Guide Cadeau sont prévus pour la phase V2 après validation de la V1.</p>
-        <a href="{{ route('boutique') }}" class="inline-flex px-6 py-3 rounded-xl bg-terre text-white text-sm font-semibold btn-touch">Explorer la boutique</a>
+    <x-slot:title>Demande de devis Pro</x-slot:title>
+    <section class="max-w-2xl mx-auto px-4 py-10 space-y-6">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-ebene">Demande de devis grand volume / export</h1>
+            <a href="{{ route('pro.index') }}" class="text-sm text-terre font-semibold hover:underline">← Retour</a>
+        </div>
+        <div class="bg-white rounded-3xl border border-ebene/10 p-6 sm:p-8">
+            <livewire:community.contact-form />
+        </div>
     </section>
 </x-app-layout>

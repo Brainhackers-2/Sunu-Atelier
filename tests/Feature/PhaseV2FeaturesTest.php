@@ -61,4 +61,17 @@ class PhaseV2FeaturesTest extends TestCase
         $res->assertStatus(200);
         $res->assertHeader('content-type', 'application/pdf');
     }
+
+    public function test_pro_invoice_pdf_requires_owner_or_admin(): void
+    {
+        $this->seed();
+        $order = Order::first();
+        $owner = $order->user;
+        $other = User::where('id', '!=', $owner->id)->where('role', 'pro')->first();
+
+        $this->actingAs($other)->get('/pro/factures/' . $order->tracking_token . '.pdf')->assertStatus(403);
+        $res = $this->actingAs($owner)->get('/pro/factures/' . $order->tracking_token . '.pdf');
+        $res->assertStatus(200);
+        $res->assertHeader('content-type', 'application/pdf');
+    }
 }

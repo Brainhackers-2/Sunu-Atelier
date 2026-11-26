@@ -66,6 +66,22 @@ class PageController extends Controller
     public function proCommander(): View    { return view('pro.commander'); }
     public function proCommandes(): View    { return view('pro.commandes'); }
     public function proFactures(): View     { return view('pro.factures'); }
+    public function proFacturePdf(string $token): \Illuminate\Http\Response
+    {
+        if (! preg_match('/^[a-f0-9]{32}$/', $token)) {
+            abort(404);
+        }
+        $order = \App\Models\Order::where('tracking_token', $token)->with('items')->firstOrFail();
+        $user = auth()->user();
+        if (! $user || (! $user->isAdmin() && $order->user_id !== $user->id)) {
+            abort(403);
+        }
+        $profile = $order->user?->proProfile;
+        $brandName = \App\Models\Setting::getValue('brand_name', 'Sunu Atelier');
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.pro-invoice', compact('order', 'profile', 'brandName'))
+            ->setPaper('a4', 'portrait');
+        return $pdf->download("Facture-Pro-{$order->order_number}.pdf");
+    }
     public function proDevis(): View        { return view('pro.devis'); }
     public function proProfil(): View       { return view('pro.profil'); }
 

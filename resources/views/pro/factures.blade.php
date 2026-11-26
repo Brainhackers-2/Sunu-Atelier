@@ -1,9 +1,29 @@
 <x-app-layout>
-    <x-slot:title>Bientôt disponible (V2)</x-slot:title>
-    <section class="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
-        <span class="px-3 py-1 rounded-full bg-or text-ebene text-xs font-bold">Fonctionnalité V2</span>
-        <h1 class="text-2xl sm:text-3xl font-bold text-ebene">Cette section arrive en V2</h1>
-        <p class="text-sm text-ebene/70">L'Espace Professionnels complet et le Guide Cadeau sont prévus pour la phase V2 après validation de la V1.</p>
-        <a href="{{ route('boutique') }}" class="inline-flex px-6 py-3 rounded-xl bg-terre text-white text-sm font-semibold btn-touch">Explorer la boutique</a>
+    <x-slot:title>Mes factures Pro</x-slot:title>
+    <section class="max-w-screen-xl mx-auto px-4 py-10 space-y-6">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-ebene">Mes Factures Commerciales (OHADA)</h1>
+            <a href="{{ route('pro.index') }}" class="text-sm text-terre font-semibold hover:underline">← Retour Espace Pro</a>
+        </div>
+
+        @php
+            $orders = auth()->check() ? auth()->user()->orders()->latest()->get() : collect();
+        @endphp
+
+        <div class="bg-white rounded-2xl border border-ebene/10 p-6 space-y-3">
+            @forelse ($orders as $order)
+                <div class="flex items-center justify-between py-3 border-b border-ebene/10 text-sm">
+                    <div>
+                        <p class="font-bold">FAC-{{ $order->order_number }}</p>
+                        <p class="text-xs text-ebene/60">{{ $order->created_at->format('d/m/Y') }} · {{ number_format($order->total_amount, 0, ',', ' ') }} FCFA</p>
+                    </div>
+                    <a href="{{ route('pro.facture.pdf', $order->tracking_token) }}" class="px-4 py-2 rounded-xl bg-foret text-ivoire text-xs font-semibold">
+                        Télécharger PDF
+                    </a>
+                </div>
+            @empty
+                <p class="text-sm text-ebene/60">Aucune facture disponible pour le moment.</p>
+            @endforelse
+        </div>
     </section>
 </x-app-layout>
