@@ -20,7 +20,16 @@ class PageController extends Controller
     }
     public function panier(): View          { return view('panier'); }
     public function commande(): View        { return view('commande'); }
-    public function confirmation(string $token): View { return view('confirmation', compact('token')); }
+    public function confirmation(string $token, \App\Services\QrCodeService $qrService): View
+    {
+        if (! preg_match('/^[a-f0-9]{32}$/', $token)) {
+            abort(404);
+        }
+        $order = \App\Models\Order::where('tracking_token', $token)->with('items')->firstOrFail();
+        $qrDataUri = $qrService->generatePngDataUri(route('scan', $order->tracking_token), 220);
+        $whatsappNumber = preg_replace('/\D+/', '', \App\Models\Setting::getValue('whatsapp_number', '221770000000'));
+        return view('confirmation', compact('order', 'qrDataUri', 'whatsappNumber'));
+    }
     public function suivi(): View           { return view('suivi'); }
     public function suiviToken(string $token): View   { return view('suivi-token', compact('token')); }
     public function scan(string $token): View { return view('scan', compact('token')); }

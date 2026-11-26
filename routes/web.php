@@ -23,6 +23,7 @@ Route::get('/produit/{slug}', [PageController::class, 'produit'])->name('produit
 Route::get('/panier', [PageController::class, 'panier'])->name('panier');
 Route::get('/commande', [PageController::class, 'commande'])->name('commande');
 Route::get('/confirmation/{token}', [PageController::class, 'confirmation'])->name('confirmation');
+Route::get('/commande/{token}/recu.pdf', [\App\Http\Controllers\ReceiptPdfController::class, 'download'])->name('commande.recu');
 
 // ─── Suivi et scan (Phase 7) ─────────────────────────────────────────────
 Route::get('/suivi', [PageController::class, 'suivi'])->name('suivi');
