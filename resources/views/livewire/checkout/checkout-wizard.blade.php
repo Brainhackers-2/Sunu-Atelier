@@ -115,9 +115,61 @@
                             <textarea wire:model="delivery_address" rows="2" class="w-full px-4 py-3 rounded-xl border border-ebene/20 bg-ivoire/40 text-sm"></textarea>
                             @error('delivery_address')<p class="text-xs text-erreur mt-1">{{ $message }}</p>@enderror
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Repère GPS ou indication (optionnel)</label>
-                            <input type="text" wire:model="gps_landmark" placeholder="Ex. Près de la station Total…" class="w-full px-4 py-3 rounded-xl border border-ebene/20 bg-ivoire/40 text-sm">
+                        <div
+                            x-data="{
+                                locating: false,
+                                geoStatus: '',
+                                geoError: '',
+                                detectPosition() {
+                                    this.geoError = '';
+                                    this.geoStatus = '';
+                                    if (!navigator.geolocation) {
+                                        this.geoError = 'La géolocalisation n’est pas supportée par votre navigateur.';
+                                        return;
+                                    }
+                                    if (!window.isSecureContext) {
+                                        this.geoError = 'La détection GPS automatique nécessite HTTPS. Saisissez votre repère manuellement ci-dessous.';
+                                        return;
+                                    }
+                                    this.locating = true;
+                                    navigator.geolocation.getCurrentPosition(
+                                        (pos) => {
+                                            const lat = pos.coords.latitude.toFixed(6);
+                                            const lng = pos.coords.longitude.toFixed(6);
+                                            const value = `GPS : ${lat}, ${lng} (https://maps.google.com/?q=${lat},${lng})`;
+                                            $wire.set('gps_landmark', value);
+                                            this.geoStatus = `Position détectée (${lat}, ${lng})`;
+                                            this.locating = false;
+                                        },
+                                        (err) => {
+                                            this.locating = false;
+                                            if (err.code === 1) {
+                                                this.geoError = 'Accès à la position refusé. Autorisez la géolocalisation ou saisissez un repère.';
+                                            } else {
+                                                this.geoError = 'Impossible de détecter votre position. Saisissez un repère manuellement.';
+                                            }
+                                        },
+                                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                                    );
+                                }
+                            }"
+                            class="space-y-2"
+                        >
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <label class="block text-sm font-medium">Repère GPS ou indication (optionnel)</label>
+                                <button
+                                    type="button"
+                                    x-on:click="detectPosition()"
+                                    :disabled="locating"
+                                    class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-foret text-ivoire text-xs font-semibold hover:bg-foret/90 disabled:opacity-60 transition-colors btn-touch"
+                                >
+                                    <i data-lucide="crosshair" class="size-4" aria-hidden="true"></i>
+                                    <span x-text="locating ? 'Détection en cours…' : 'Détecter ma position GPS'"></span>
+                                </button>
+                            </div>
+                            <input type="text" wire:model="gps_landmark" placeholder="Ex. Près de la station Total… ou cliquez sur Détecter ma position GPS" class="w-full px-4 py-3 rounded-xl border border-ebene/20 bg-ivoire/40 text-sm">
+                            <p x-show="geoStatus" x-text="geoStatus" class="text-xs text-foret font-medium" style="display: none;"></p>
+                            <p x-show="geoError" x-text="geoError" class="text-xs text-terre font-medium" style="display: none;"></p>
                         </div>
                     @endif
                 @elseif ($step === 3)
