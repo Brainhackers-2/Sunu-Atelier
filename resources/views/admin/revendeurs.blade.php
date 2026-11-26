@@ -1,0 +1,1 @@
+<x-admin-layout><x-slot:title>Revendeurs Pro</x-slot:title><livewire:admin.pro-accounts-manager /></x-admin-layout>

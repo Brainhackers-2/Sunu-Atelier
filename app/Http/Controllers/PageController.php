@@ -32,7 +32,14 @@ class PageController extends Controller
     }
     public function suivi(): View           { return view('suivi'); }
     public function suiviToken(string $token): View   { return view('suivi-token', compact('token')); }
-    public function scan(string $token): View { return view('scan', compact('token')); }
+    public function scan(string $token): View
+    {
+        if (! preg_match('/^[a-f0-9]{32}$/', $token)) {
+            abort(404);
+        }
+        $order = \App\Models\Order::where('tracking_token', $token)->firstOrFail();
+        return view('scan', compact('token', 'order'));
+    }
     public function favoris(): View         { return view('favoris'); }
     public function notreHistoire(): View
     {
@@ -84,5 +91,18 @@ class PageController extends Controller
     public function adminCodes(): View      { return view('admin.codes-promo'); }
     public function adminRapports(): View   { return view('admin.rapports'); }
     public function adminReglages(): View   { return view('admin.reglages'); }
+    public function adminRevendeurs(): View { return view('admin.revendeurs'); }
+    public function adminRouteSheetPdf(\App\Services\QrCodeService $qrService): \Illuminate\Http\Response
+    {
+        $orders = \App\Models\Order::whereIn('status', ['confirmee', 'en_preparation', 'livraison_programmee', 'en_cours_de_livraison'])
+            ->latest()->get();
+        $rows = $orders->map(fn ($o) => [
+            'order' => $o,
+            'qr' => $qrService->generateSvgDataUri(route('scan', $o->tracking_token), 60),
+        ]);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.route-sheet', compact('rows'))
+            ->setPaper('a4', 'landscape');
+        return $pdf->download('Feuille-de-route-' . now()->format('Ymd') . '.pdf');
+    }
     public function adminLogin(): View      { return view('admin.login'); }
 }

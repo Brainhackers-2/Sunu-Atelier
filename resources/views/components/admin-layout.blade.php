@@ -28,6 +28,8 @@
                     ['route' => 'admin.codes-promo', 'label' => 'Codes promo', 'icon' => 'ticket'],
                     ['route' => 'admin.clients', 'label' => 'Clients & CRM', 'icon' => 'users'],
                     ['route' => 'admin.rapports', 'label' => 'Rapports', 'icon' => 'bar-chart-3'],
+                    ['route' => 'admin.revendeurs', 'label' => 'Revendeurs Pro', 'icon' => 'briefcase'],
+                    ['route' => 'admin.route-sheet.pdf', 'label' => 'Feuille de route PDF', 'icon' => 'map'],
                     ['route' => 'admin.reglages', 'label' => 'Réglages & Contenus', 'icon' => 'settings'],
                 ] as $item)
                     <a href="{{ route($item['route']) }}"

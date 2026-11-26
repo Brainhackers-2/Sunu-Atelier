@@ -79,6 +79,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/codes-promo',[PageController::class, 'adminCodes'])->name('codes-promo');
     Route::get('/rapports',  [PageController::class, 'adminRapports'])->name('rapports');
     Route::get('/reglages',  [PageController::class, 'adminReglages'])->name('reglages');
+    Route::get('/revendeurs',[PageController::class, 'adminRevendeurs'])->name('revendeurs');
+    Route::get('/logistique/feuille-de-route.pdf', [PageController::class, 'adminRouteSheetPdf'])->name('route-sheet.pdf');
     Route::get('/login',     [PageController::class, 'adminLogin'])->name('login')->withoutMiddleware(['auth', 'role:admin']);
     Route::post('/login',    [AuthController::class, 'adminLogin'])->name('login.submit')->withoutMiddleware(['auth', 'role:admin']);
 });
