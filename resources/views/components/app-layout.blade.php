@@ -17,7 +17,7 @@
     {{-- Livewire styles --}}
     @livewireStyles
 </head>
-<body class="bg-ivoire text-ebene antialiased">
+<body class="bg-ivoire text-ebene antialiased overflow-x-hidden">
 
     {{-- ═══════════════════════════════════════════
          Bandeau supérieur (ticker de réassurance)

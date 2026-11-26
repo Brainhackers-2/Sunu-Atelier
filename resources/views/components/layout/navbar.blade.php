@@ -27,16 +27,16 @@
     role="navigation"
     aria-label="Navigation principale"
 >
-    <div class="max-w-screen-xl mx-auto px-4 h-[72px] flex items-center justify-between gap-4">
+    <div class="max-w-screen-xl mx-auto px-3 sm:px-4 h-16 sm:h-[72px] flex items-center justify-between gap-2 sm:gap-4">
 
         {{-- ── Logo ───────────────────────────────── --}}
-        <a href="{{ route('home') }}" class="flex items-center gap-2.5 shrink-0 group" aria-label="Sunu Atelier – Accueil">
-            <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-11 w-11 rounded-xl object-contain shrink-0">
-            <div class="flex flex-col leading-tight">
-                <span class="text-xl font-bold text-foret tracking-tight group-hover:text-terre transition-colors">
+        <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-2.5 min-w-0 group" aria-label="Sunu Atelier – Accueil">
+            <img src="{{ asset('images/logo-sunu-atelier.png') }}" alt="Logo Sunu Atelier" class="h-9 w-9 sm:h-11 sm:w-11 rounded-xl object-contain shrink-0">
+            <div class="flex flex-col leading-tight min-w-0">
+                <span class="text-base sm:text-xl font-bold text-foret tracking-tight group-hover:text-terre transition-colors truncate">
                     Sunu Atelier
                 </span>
-                <span class="text-[10px] text-ebene/60 tracking-widest uppercase">Artisanat d'exception</span>
+                <span class="text-[9px] sm:text-[10px] text-ebene/60 tracking-wider sm:tracking-widest uppercase truncate">Artisanat d'exception</span>
             </div>
         </a>
 
@@ -57,7 +57,7 @@
         </nav>
 
         {{-- ── Actions rapides ───────────────────── --}}
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-0.5 sm:gap-1 shrink-0">
 
             {{-- Recherche --}}
             <button
