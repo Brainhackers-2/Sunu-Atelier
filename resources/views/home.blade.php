@@ -111,22 +111,23 @@
             <p class="text-sm text-ebene/65 mt-2">Explorez nos quatre grandes familles de créations façonnées au Sénégal.</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
             @foreach ($categories as $cat)
                 <a href="{{ route('boutique', ['cat' => $cat->slug]) }}"
-                   class="group relative rounded-2xl overflow-hidden bg-foret text-ivoire p-6 min-h-[180px] flex flex-col justify-between shadow-sm hover:shadow-lg transition-all gs-reveal">
+                   class="group relative rounded-2xl overflow-hidden bg-foret text-ivoire p-4 sm:p-6 min-h-[240px] sm:min-h-[320px] md:min-h-[360px] flex flex-col justify-between shadow-sm hover:shadow-xl transition-all gs-reveal">
                     @if ($cat->header_image)
                         <img src="{{ asset($cat->header_image) }}"
                              alt="{{ $cat->name }}"
-                             class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 group-hover:scale-105 transition-all duration-500"
+                             class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                              loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-ebene/90 via-ebene/30 to-transparent"></div>
                     @endif
-                    <span class="relative z-10 w-10 h-10 rounded-xl bg-ivoire/15 flex items-center justify-center text-or group-hover:scale-110 transition-transform">
+                    <span class="relative z-10 w-10 h-10 rounded-xl bg-ebene/45 backdrop-blur-sm flex items-center justify-center text-or group-hover:scale-110 transition-transform">
                         <i data-lucide="compass" class="size-5" aria-hidden="true"></i>
                     </span>
                     <div class="relative z-10">
                         <h3 class="font-bold text-base sm:text-lg leading-snug group-hover:text-or transition-colors">{{ $cat->name }}</h3>
-                        <p class="text-xs text-ivoire/75 mt-1 line-clamp-2">{{ $cat->description }}</p>
+                        <p class="text-xs text-ivoire/85 mt-1 line-clamp-2">{{ $cat->description }}</p>
                     </div>
                 </a>
             @endforeach
