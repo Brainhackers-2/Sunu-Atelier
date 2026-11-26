@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../../app/Livewire/**/*.php';
+
+/* ─── Sunu Atelier – Système de design ─── */
+@theme {
+    /* Typographie */
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Palette imposée (cahier 1.5) */
+    --color-foret:    #125B3E;
+    --color-or:       #FFB800;
+    --color-terre:    #C2410C;
+    --color-ebene:    #131622;
+    --color-ivoire:   #FAF8F5;
+    --color-whatsapp: #25D366;
+    --color-erreur:   #B91C1C;
+
+    /* Breakpoints mobile-first */
+    --breakpoint-xs: 480px;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+}
+
+/* Cibles tactiles (WCAG, 44 px min) */
+.btn-touch {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Respect prefers-reduced-motion pour toutes les animations */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
